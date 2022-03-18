@@ -1,0 +1,137 @@
+
+
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
+
+
+  
+
+}
+
+.login-container p {
+    margin: 0;
+    padding: 0;
+    
+}
+.login-box {
+    background-color: #fff;
+
+    border-radius: 8px;
+
+}
+
+
+.login-box .login-header {
+    padding-top: 10px;
+
+    font-size: 20px;
+    font-weight: 700;
+    padding-left: 50px;
+    padding-right: 50px;
+    color: #664986;
+
+    display: flex;
+    justify-content: center;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-top: 20px;
+    
+}
+
+.login-box .login-form {
+    padding: 40px;
+}
+
+.login-box .first-name {
+    margin-bottom: 20px;
+}
+
+.login-box .first-name p {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.login-box .last-name {
+    margin-bottom: 20px;
+}
+
+.login-box .last-name p {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.login-box .email {
+    margin-bottom: 20px;
+}
+
+.login-box .email p {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.login-box .password {
+    margin-bottom: 20px;
+}
+
+.login-box .password p {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.login-box .login {
+    display: flex;
+    justify-content: center;
+    background-color: #60467e;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+
+}
+
+
+.login-box .login:hover {
+    color: #fff;
+    background-color: #6c4f8f
+}
+
+.login .button {
+    font-size: 18px;
+    padding: 10px 16px;
+
+
+}
+
+.login-box .sign-up {
+    display: flex;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.login-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    color: #fff;
+    padding: 20px;
+}

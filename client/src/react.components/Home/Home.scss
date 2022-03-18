@@ -1,0 +1,322 @@
+$maincolor: #664986;
+
+.task-wrapper {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+      
+}
+
+.task-manager {
+
+    display: grid;
+
+
+    width: 100%;
+    max-width: 1200px;
+    height: 90vh;
+    max-height: 900px;
+    grid-template-columns: 200px repeat(12, 1fr); /* e.g. the first 20% means the first column is 20% wide */
+    grid-template-rows: auto;
+    grid-template-areas:
+        "l c c c c c c c c c c c c";
+        
+}
+
+
+
+.left-bar {
+    background-color: #f5f8ff;
+    border-right: 1px solid #e3e7f7;
+    grid-area: l;
+    min-width: 150px;
+}
+
+.left-bar .left-content {
+    padding: 40px;
+    padding-top: 80px;
+}
+
+.left-bar .left-content .action-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.left-bar .icon {
+    margin-right: 10px;
+    height: 14px;
+    width: 14px;
+}
+
+.left-bar .item {
+    margin-bottom: 14px;
+    font-weight: 500;
+}
+
+.left-bar .left-content .category-list {
+    margin-top: 50px;
+    list-style-type: none;
+    
+}
+
+
+.page-content {
+    background-color: #fff;
+    padding-top: 30px;
+    padding-right: 5px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    grid-area: c;
+    border-right: 1px solid #e3e7f7;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    position: relative;
+
+    .header {
+        font-size: 26px;
+        font-weight: 400;
+        
+        margin-bottom: -30px;
+        padding: 10px;
+        font-weight: 700;
+    }
+
+    .create-button {
+        height: auto;
+        width: auto;
+        position: absolute;
+        right: 0;
+        margin-right: 20px;
+    
+    
+    }
+
+    .project-wrapper {
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+        .column-headers {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-rows: auto;
+
+
+
+
+        }
+
+
+
+        .my-tasks {
+            display: flex;
+            flex-direction: column;
+            .task-row {
+                display: grid;
+                grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+                grid-template-rows: auto;
+                border-top: 1px solid #ddd;
+                border-bottom: 1px solid #ddd;
+                cursor: pointer;
+                padding-top: 10px;
+                padding-bottom: 10px;
+
+
+            }
+            .task-row:hover {
+                background-color:rgb(214, 214, 255);
+            }
+            .task-row .item {
+                display: flex;
+                align-items: center;
+            }
+
+        }
+    }
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+/* page-content */
+
+
+.right-bar {
+    grid-area: r;
+    background-color: #fff;
+    overflow:auto;
+    display: flex;
+    flex-direction: column;
+    display: none;
+}
+
+
+.right-bar .header {
+    padding: 25px;
+    padding-top: 50px;
+    font-size: 20px;
+    color: rgb(168, 158, 158);
+
+}
+
+.right-bar .box-wrapper {
+    overflow: auto;
+}
+
+.right-bar .box {
+    background-color: #fde7ea;
+    padding: 20px;
+    margin: 20px;
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 2px 2px 4px 0px rgba(235, 235, 235, 1);
+
+
+}
+
+.right-bar .box:hover {
+    transform: translatex(2px);
+}
+
+.right-bar .box .time {
+    font-size: 10px;
+    margin-bottom: 10px;
+
+}
+
+.right-bar .box .title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.right-bar .box .people {
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+    font-weight: 500;
+    flex-wrap: wrap;
+}
+
+.im {
+    padding: 5px;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 4px;
+    object-fit: cover;
+}
+
+
+/*  modals */
+
+
+
+
+.create-project-dialog {
+
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow: auto;
+
+    .create-project-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .create-project-header .title {
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1;
+    }
+
+    .create-project-form {
+        overflow: auto;
+    }
+
+
+    .item {
+        width: 350px;
+        margin-bottom: 20px;
+    }
+
+    .summary {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .chat-break {
+        margin-bottom: 25px;
+        margin-top: 25px;
+    }
+
+    .chat-break .line {
+        width: 100%;
+        border-bottom: 1px solid #ddd;
+    }
+
+
+    .details {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .difficulty {
+            width: 100%;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .proj-date {
+            width: 100%;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+
+    }
+
+
+
+};
+
+
+@media only screen and (max-width: 742.5px) {
+    .task-manager {
+        
+        padding: 20px;
+
+        grid-template-columns: 1fr;
+        grid-template-rows:  4fr 2fr;
+        grid-template-areas:
+            "c"
+            "r";
+
+    }
+    .right-bar {
+        overflow: visible;
+    }
+
+    .left-bar {
+        display: none;
+    }
+
+
+}
