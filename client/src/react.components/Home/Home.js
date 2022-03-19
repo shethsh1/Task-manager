@@ -12,12 +12,6 @@ import Menu from '@mui/material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { red } from '@mui/material/colors';
 
-const options = [
-    'Edit',
-    'Delete'
-
-];
-
 function CircularProgressWithLabel(props) {
     return (
         <Box sx={{ position: 'relative', display: 'inline-flex' }}>
@@ -53,10 +47,10 @@ CircularProgressWithLabel.propTypes = {
 
 
 export default function Home() {
-    const [open, setOpen] = React.useState(false);
-    const [value, setValue] = React.useState(null);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const openAnchor = Boolean(anchorEl);
+    const [open, setOpen] = React.useState(false); /* create-project-form */
+    const [anchorEl, setAnchorEl] = React.useState(null); /* task table */
+    const [value, setValue] = React.useState(null); /* create-project-form */
+    const openAnchor = Boolean(anchorEl); /* task table */
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -79,7 +73,7 @@ export default function Home() {
         <div className="task-wrapper">
 
 
-
+            { /* create project modal */}
             <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
 
                 <div className="create-project-dialog">
@@ -175,12 +169,11 @@ export default function Home() {
                             <div className="proj-date">
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DatePicker
+                                        disablePast
                                         label="Due date"
                                         inputFormat="MM/dd/yyyy"
                                         value={value}
-                                        onChange={(newValue) => {
-                                            setValue(newValue);
-                                        }}
+                                        onChange={(newValue) => setValue(newValue)}
                                         renderInput={(params) => <TextField {...params} fullWidth />}
 
                                     />
@@ -199,6 +192,37 @@ export default function Home() {
                     </DialogActions>
                 </div>
             </Dialog >
+
+
+            {/* delete task modal */}
+            <div class="modal fade" id="deleteTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="garbage">
+                                <div class="garbage-icon">
+                                    <span class="edit"><i class="fa-regular fa-trash-can"></i></span>
+                                </div>
+                            </div>
+
+                            <div class="fw-bold text-center">
+                                Are you sure you want to delete this task?
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
 
@@ -222,6 +246,7 @@ export default function Home() {
                 </div>
 
 
+                { /* page contents */}
                 <div className="page-content">
 
                     <div className="header">
@@ -233,142 +258,225 @@ export default function Home() {
                     </button>
 
                     <div class="project-wrapper">
-                        <div class="column-headers">
-                            <span>Task</span>
-                            <span>End Date</span>
-                            <span>Status</span>
-                            <span>Priority</span>
-                            <span>Progress</span>
-                            <span></span>
-
-                        </div>
 
                         <div class="my-tasks">
+                            <div class="column-headers">
+                                <span class="item-name">Task</span>
+                                <span class="item">End Date</span>
+                                <span class="item">Status</span>
+                                <span class="item">Progress</span>
+                                <span class="item">Priority</span>
+                                <span></span>
+
+                            </div>
 
                             <div class="task-row">
 
-                                <span className="item">Task 1</span>
-                                <span className="item">3/18/2022</span>
+
+                                <span className="item-name">Task 1</span>
                                 <span className="item">
 
-                                    <div class="dropdown">
-                                        <button class="btn btn-warning" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            NOT ACTIVE
-                                        </button>
+
+
+                                </span>
+                                <span className="item">
+
+                                    <div class="dropdown w-100 h-100">
+                                        <div class="status-fix text-white bg-danger font-weight-normal w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Not Active
+                                        </div>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                            <Box sx={{ display: "flex", flexDirection: "column", padding: '0 10px' }}>
-                                                <Box sx={{ display: "flex", alignItems: 'center', justifyContent: "space-between", paddingBottom: '10px' }}>
-                                                    <span>In Progress</span>
-                                                    <span style={{ backgroundColor: 'blue', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                                                </Box>
 
-                                                <Box sx={{ display: "flex", alignItems: 'center', justifyContent: "space-between", color: '#0000EE', paddingBottom: '10px' }}>
-                                                    <span>Not Active</span>
-                                                    <span style={{ backgroundColor: 'red', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                                                </Box>
+                                            <div class="drop-item">
 
-                                                <Box sx={{ display: "flex", alignItems: 'center', justifyContent: "space-between" }}>
-                                                    <span>Completed</span>
-                                                    <span style={{ backgroundColor: 'green', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                                                </Box>
+                                                <span>In Progress</span>
+                                                <span style={{ backgroundColor: 'blue', borderRadius: '50%', width: '20px', height: '20px' }}></span>
+                                            </div>
 
+                                            <div class="drop-item">
+                                                <span>Not Active</span>
+                                                <span style={{ backgroundColor: 'red', borderRadius: '50%', width: '20px', height: '20px' }}></span>
+                                            </div>
 
-                                            </Box>
+                                            <div class="drop-item">
+                                                <span>Completed</span>
+                                                <span style={{ backgroundColor: 'green', borderRadius: '50%', width: '20px', height: '20px' }}></span>
+                                            </div>
+
                                         </div>
                                     </div>
 
 
                                 </span>
-                                <span className="item" >High</span>
+
                                 <span className="item"><CircularProgressWithLabel value={30} /></span>
+                                <span className="item" >
+
+                                    <div class="dropdown w-100 h-100">
+
+                                        <div class="priority-fix w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                            <div class="priority-order">
+                                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
+                                                <span>  High</span>
+                                            </div>
+
+                                        </div>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+                                            <div class="drop-item">
+                                                <span>Critical</span>
+                                                <span style={{ color: 'red' }}><i class="fa-solid fa-flag"></i></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>High</span>
+                                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>Medium</span>
+                                                <span style={{ color: 'green' }}><i class="fa-solid fa-flag"></i></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>Low</span>
+                                                <span style={{ color: 'blue' }}><i class="fa-solid fa-flag"></i></span>
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+
+
+                                </span>
                                 <span>
 
-                                    <IconButton
-                                        aria-label="more"
-                                        id="long-button"
-                                        aria-controls={openAnchor ? 'demo-customized-menu' : undefined}
-                                        aria-expanded={openAnchor ? 'true' : undefined}
-                                        aria-haspopup="true"
-                                        onClick={handleAnchorClick}
-                                    >
-                                        <MoreVertIcon />
-                                    </IconButton>
-                                    <Menu
-                                        id="long-menu"
-                                        MenuListProps={{
-                                            'aria-labelledby': 'long-button',
-                                        }}
-                                        anchorEl={anchorEl}
-                                        open={openAnchor}
-                                        onClose={handleAnchorClose}
-                                        PaperProps={{
-                                            style: {
-                                                maxHeight: 48 * 4.5,
-                                                width: '20ch',
-                                            },
-                                        }}
-                                    >
-                                        <MenuItem key="Edit" onClick={handleAnchorClose}>
-                                            <i style={{ marginRight: '20px' }} class="fa-solid fa-pen-to-square"></i> Edit
-                                        </MenuItem>
+                                    <div class="btn-group">
+                                        <IconButton
+                                            id="long-button"
+                                            data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
+                                        >
+                                            <MoreVertIcon />
+                                        </IconButton>
+                                        <ul class="dropdown-menu dropdown-menu-lg-end">
 
-                                        <hr style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }} />
+                                            <div class="ellip-tool">
+                                                <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                                <span>Edit</span>
+                                            </div>
+                                            <li><hr class="dropdown-divider" /></li>
+                                            <div data-bs-toggle="modal" data-bs-target="#deleteTask" class="ellip-tool" style={{ color: "red" }}>
+                                                <span class="icon"><i class="fa-solid fa-trash"></i></span>
+                                                <span>Delete</span>
+                                            </div>
+                                        </ul>
 
-                                        <MenuItem style={{ color: "#DB3A29" }} key="Delete" onClick={handleAnchorClose}>
-                                            <i style={{ marginRight: '20px' }} class="fa-solid fa-trash"></i> Delete
+                                    </div>
 
-                                        </MenuItem>
-                                    </Menu>
 
                                 </span>
                             </div>
 
                             <div class="task-row">
 
-                                <span className="item">Task 1</span>
+                                <span className="item-name">Task 1</span>
                                 <span className="item">3/18/2022</span>
-                                <span className="item">NOT ACTIVE</span>
-                                <span className="item">High</span>
+                                <span className="item">
+
+                                    <div class="dropdown w-100 h-100">
+                                        <div class="status-fix text-white bg-danger font-weight-normal w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Not Active
+                                        </div>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+                                            <div class="drop-item">
+
+                                                <span>In Progress</span>
+                                                <span style={{ backgroundColor: 'blue', borderRadius: '50%', width: '20px', height: '20px' }}></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>Not Active</span>
+                                                <span style={{ backgroundColor: 'red', borderRadius: '50%', width: '20px', height: '20px' }}></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>Completed</span>
+                                                <span style={{ backgroundColor: 'green', borderRadius: '50%', width: '20px', height: '20px' }}></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </span>
+
                                 <span className="item"><CircularProgressWithLabel value={10} /></span>
+                                <span className="item" >
+
+                                    <div class="dropdown w-100 h-100">
+                                        <div class="priority-fix w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <div class="priority-order">
+                                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
+                                                <span>  High</span>
+                                            </div>
+
+                                        </div>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+                                            <div class="drop-item">
+                                                <span>Critical</span>
+                                                <span style={{ color: 'red' }}><i class="fa-solid fa-flag"></i></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>High</span>
+                                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>Medium</span>
+                                                <span style={{ color: 'green' }}><i class="fa-solid fa-flag"></i></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>Low</span>
+                                                <span style={{ color: 'blue' }}><i class="fa-solid fa-flag"></i></span>
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+
+
+                                </span>
 
                                 <span>
 
-                                    <IconButton
-                                        aria-label="more"
-                                        id="long-button"
-                                        aria-controls={openAnchor ? 'demo-customized-menu' : undefined}
-                                        aria-expanded={openAnchor ? 'true' : undefined}
-                                        aria-haspopup="true"
-                                        onClick={handleAnchorClick}
-                                    >
-                                        <MoreVertIcon />
-                                    </IconButton>
-                                    <Menu
-                                        id="long-menu"
-                                        MenuListProps={{
-                                            'aria-labelledby': 'long-button',
-                                        }}
-                                        anchorEl={anchorEl}
-                                        open={openAnchor}
-                                        onClose={handleAnchorClose}
-                                        PaperProps={{
-                                            style: {
-                                                maxHeight: 48 * 4.5,
-                                                width: '20ch',
-                                            },
-                                        }}
-                                    >
-                                        <MenuItem key="Edit" onClick={handleAnchorClose}>
-                                            <i style={{ marginRight: '20px' }} class="fa-solid fa-pen-to-square"></i> Edit
-                                        </MenuItem>
+                                    <div class="btn-group">
+                                        <IconButton
+                                            id="long-button"
+                                            data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
+                                        >
+                                            <MoreVertIcon />
+                                        </IconButton>
+                                        <ul class="dropdown-menu dropdown-menu-lg-end">
 
-                                        <hr style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }} />
+                                            <div class="ellip-tool">
+                                                <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                                <span>Edit</span>
+                                            </div>
+                                            <li><hr class="dropdown-divider" /></li>
+                                            <div data-bs-toggle="modal" data-bs-target="#deleteTask" class="ellip-tool" style={{ color: "red" }}>
+                                                <span class="icon"><i class="fa-solid fa-trash"></i></span>
+                                                <span>Delete</span>
+                                            </div>
+                                        </ul>
 
-                                        <MenuItem style={{ color: "#DB3A29" }} key="Delete" onClick={handleAnchorClose}>
-                                            <i style={{ marginRight: '20px' }} class="fa-solid fa-trash"></i> Delete
-
-                                        </MenuItem>
-                                    </Menu>
+                                    </div>
 
 
                                 </span>
@@ -376,50 +484,102 @@ export default function Home() {
 
                             <div class="task-row">
 
-                                <span className="item">Task 1</span>
+                                <span className="item-name">Task 1</span>
                                 <span className="item">3/18/2022</span>
-                                <span className="item">NOT ACTIVE</span>
-                                <span className="item">High</span>
+                                <span className="item">
+
+                                    <div class="dropdown w-100 h-100">
+                                        <div class="status-fix text-white bg-danger font-weight-normal w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Not Active
+                                        </div>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+                                            <div class="drop-item">
+
+                                                <span>In Progress</span>
+                                                <span style={{ backgroundColor: 'blue', borderRadius: '50%', width: '20px', height: '20px' }}></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>Not Active</span>
+                                                <span style={{ backgroundColor: 'red', borderRadius: '50%', width: '20px', height: '20px' }}></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>Completed</span>
+                                                <span style={{ backgroundColor: 'green', borderRadius: '50%', width: '20px', height: '20px' }}></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </span>
+
                                 <span className="item"><CircularProgressWithLabel value={100} /></span>
+                                <span className="item" >
+
+                                    <div class="dropdown w-100 h-100">
+                                        <div class="priority-fix w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <div class="priority-order">
+                                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
+                                                <span>  High</span>
+                                            </div>
+
+                                        </div>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+                                            <div class="drop-item">
+                                                <span>Critical</span>
+                                                <span style={{ color: 'red' }}><i class="fa-solid fa-flag"></i></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>High</span>
+                                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>Medium</span>
+                                                <span style={{ color: 'green' }}><i class="fa-solid fa-flag"></i></span>
+                                            </div>
+
+                                            <div class="drop-item">
+                                                <span>Low</span>
+                                                <span style={{ color: 'blue' }}><i class="fa-solid fa-flag"></i></span>
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+
+
+                                </span>
 
                                 <span>
 
-                                    <IconButton
-                                        aria-label="more"
-                                        id="long-button"
-                                        aria-controls={openAnchor ? 'demo-customized-menu' : undefined}
-                                        aria-expanded={openAnchor ? 'true' : undefined}
-                                        aria-haspopup="true"
-                                        onClick={handleAnchorClick}
-                                    >
-                                        <MoreVertIcon />
-                                    </IconButton>
-                                    <Menu
-                                        id="long-menu"
-                                        MenuListProps={{
-                                            'aria-labelledby': 'long-button',
-                                        }}
-                                        anchorEl={anchorEl}
-                                        open={openAnchor}
-                                        onClose={handleAnchorClose}
-                                        PaperProps={{
-                                            style: {
-                                                maxHeight: 48 * 4.5,
-                                                width: '20ch',
-                                            },
-                                        }}
-                                    >
-                                        <MenuItem key="Edit" onClick={handleAnchorClose}>
-                                            <i style={{ marginRight: '20px' }} class="fa-solid fa-pen-to-square"></i> Edit
-                                        </MenuItem>
+                                    <div class="btn-group">
+                                        <IconButton
+                                            id="long-button"
+                                            data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
+                                        >
+                                            <MoreVertIcon />
+                                        </IconButton>
+                                        <ul class="dropdown-menu dropdown-menu-lg-end">
 
-                                        <hr style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }} />
+                                            <div class="ellip-tool">
+                                                <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                                <span>Edit</span>
+                                            </div>
+                                            <li><hr class="dropdown-divider" /></li>
+                                            <div data-bs-toggle="modal" data-bs-target="#deleteTask" class="ellip-tool" style={{ color: "red" }}>
+                                                <span class="icon"><i class="fa-solid fa-trash"></i></span>
+                                                <span>Delete</span>
+                                            </div>
+                                        </ul>
 
-                                        <MenuItem style={{ color: "#DB3A29" }} key="Delete" onClick={handleAnchorClose}>
-                                            <i style={{ marginRight: '20px' }} class="fa-solid fa-trash"></i> Delete
-
-                                        </MenuItem>
-                                    </Menu>
+                                    </div>
 
                                 </span>
                             </div>

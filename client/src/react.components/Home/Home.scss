@@ -1,5 +1,9 @@
 $maincolor: #664986;
 
+$inProgress: rgb(255, 255, 255);
+$completed: rgb(77, 215, 120);
+
+
 .task-wrapper {
 
     display: flex;
@@ -97,45 +101,96 @@ $maincolor: #664986;
     }
 
     .project-wrapper {
-        display: flex;
-        flex-direction: column;
+
         margin-top: 20px;
-        .column-headers {
+
+        .my-tasks {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
             grid-template-rows: auto;
+            grid-auto-rows: auto;
+            grid-auto-columns: auto;
+            
+        }
 
 
-
-
+        .column-headers {
+            display: contents;
         }
 
 
 
-        .my-tasks {
+        .column-headers .item {
             display: flex;
-            flex-direction: column;
-            .task-row {
-                display: grid;
-                grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
-                grid-template-rows: auto;
-                border-top: 1px solid #ddd;
-                border-bottom: 1px solid #ddd;
-                cursor: pointer;
-                padding-top: 10px;
-                padding-bottom: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        .column-headers .item-name {
+            display: flex;
+            align-items: center;
+        }
 
-
-            }
-            .task-row:hover {
-                background-color:rgb(214, 214, 255);
-            }
-            .task-row .item {
-                display: flex;
-                align-items: center;
-            }
+        .task-row {
+            display: contents;
+            cursor: pointer;
 
         }
+        .task-row > span {
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 5px 0;
+        }
+        .task-row:hover > span {
+            background-color:rgb(240, 188, 229);
+        }
+        .task-row .item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .task-row .status-fix {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .task-row .priority-fix {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f6c66e5e;
+            color: orange;
+            font-weight: bold;
+        }
+
+        .task-row .item-name {
+            display: flex;
+            align-items: center;
+        }
+        .task-row .drop-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+        }
+        .task-row .drop-item:hover {
+            background-color:rgba(235, 235, 235, 1);
+        }
+        .task-row .ellip-tool {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+
+
+        }
+        .task-row .ellip-tool:hover {
+            background-color:rgba(235, 235, 235, 1);
+        }
+        .task-row .ellip-tool .icon {
+            margin-right: 10px;
+            margin-left: 10px;
+        }
+
+        
     }
 
 
@@ -226,8 +281,35 @@ $maincolor: #664986;
 /*  modals */
 
 
+/* delete task modal */
+
+#deleteTask {
+
+    .garbage {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .garbage-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 1px solid red;
+            margin-bottom: 20px;
+        }
+        .garbage-icon .edit {
+            font-size: 40px;
+            color: red;
+        }
+    }
 
 
+}
+
+/* create project modal */ 
 .create-project-dialog {
 
     display: flex;
