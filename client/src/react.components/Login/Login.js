@@ -10,6 +10,7 @@ export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+
     const handleInput = () => {
         console.log('email: ' + email)
         console.log('password: ' + password)
@@ -19,12 +20,16 @@ export default function Login() {
 
 
 
+
+    /* on mount */
     useEffect(() => {
         var today = new Date();
         var year = today.getFullYear();
         var copyright = document.getElementById("copyright");
         copyright.innerHTML = '© Shaahid Sheth ' + year;
     }, [])
+
+
 
 
 

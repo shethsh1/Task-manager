@@ -1,24 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './Login.css'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+import RegistrationHandler from './RegistrationHandler';
 
 const API_HOST_URL = process.env.REACT_APP_KEY || "";
 
 
 export default function Signup() {
+    const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
 
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-
-    const handleInput = () => {
-        console.log('firstname: ' + firstName)
-        console.log('lastname: ' + lastName)
-        console.log('email: ' + email)
-        console.log('password: ' + password)
-
-    }
+    const successMessage = useRef(1)
+    const errorMessage = useRef(1)
 
 
 
@@ -38,55 +32,24 @@ export default function Signup() {
 
                 <div className="login-box">
                     <div className="login-header">
-                        Log in to your account
+                        Sign up for your account
                     </div>
 
-                    <div className="login-form">
-
-                        <div className="first-name">
-                            <p>First name</p>
-                            <input autoFocus={true} className="form-control" name="firstName" placeholder="First name"
-                                type="text"
-                                onChange={(event) => setFirstName(event.target.value)}
-                                value={firstName} />
-                        </div>
-
-                        <div className="last-name">
-                            <p>Last name</p>
-                            <input className="form-control" name="lastName" placeholder="Last name"
-                                type="text"
-                                onChange={(event) => setLastName(event.target.value)}
-                                value={lastName}
-                            />
-                        </div>
-
-                        <div className="email">
-                            <p>Email address</p>
-                            <input className="form-control" id="email" name="email" placeholder="Email address"
-                                type="email"
-                                onChange={(event) => setEmail(event.target.value)}
-                                value={email}
-                            />
-                        </div>
-
-                        <div className="password">
-                            <p>Password</p>
-                            <input autoComplete="off" className="form-control password" id="password" name="password"
-                                placeholder="Password"
-                                type="password"
-                                onChange={event => setPassword(event.target.value)}
-                                value={password}
-                            />
-
-                        </div>
-
-                        <div onClick={handleInput} className="login">
-                            <div className="button">
-                                Sign up
-                            </div>
-                        </div>
-
+                    <div ref={successMessage} class="alert alert-success alert-msg" role="alert">
+                        {success}
                     </div>
+                    <div ref={errorMessage} class="alert alert-danger alert-msg" role="alert">
+                        {error}
+                    </div>
+
+                    <RegistrationHandler
+                        setError={setError}
+                        setSuccess={setSuccess}
+                        successMessage={successMessage}
+                        errorMessage={errorMessage}
+                    />
+
+
 
                     <div className="sign-up">
                         <span style={{ marginRight: '5px' }}>Already have an account? </span>

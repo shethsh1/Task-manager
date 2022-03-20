@@ -28,7 +28,7 @@ function CircularProgressWithLabel(props) {
                     justifyContent: 'center',
                 }}
             >
-                <Typography variant="caption" component="div" color="text.secondary">
+                <Typography variant="caption" component="div" color="text.primary">
                     {`${Math.round(props.value)}%`}
                 </Typography>
             </Box>
@@ -48,9 +48,8 @@ CircularProgressWithLabel.propTypes = {
 
 export default function Home() {
     const [open, setOpen] = React.useState(false); /* create-project-form */
-    const [anchorEl, setAnchorEl] = React.useState(null); /* task table */
     const [value, setValue] = React.useState(null); /* create-project-form */
-    const openAnchor = Boolean(anchorEl); /* task table */
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -60,12 +59,6 @@ export default function Home() {
         setOpen(false);
     };
 
-    const handleAnchorClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleAnchorClose = () => {
-        setAnchorEl(null);
-    };
 
 
 
@@ -253,7 +246,7 @@ export default function Home() {
                         Projects
                     </div>
 
-                    <button type="button" className="btn btn-primary create-button" onClick={handleClickOpen}>
+                    <button type="button" className="btn btn-secondary create-button indigo-200" onClick={handleClickOpen}>
                         Create project
                     </button>
 
@@ -278,6 +271,7 @@ export default function Home() {
 
 
 
+
                                 </span>
                                 <span className="item">
 
@@ -309,7 +303,7 @@ export default function Home() {
 
                                 </span>
 
-                                <span className="item"><CircularProgressWithLabel value={30} /></span>
+                                <span className="item"><CircularProgressWithLabel value={30} color="secondary" /></span>
                                 <span className="item" >
 
                                     <div class="dropdown w-100 h-100">
@@ -413,7 +407,7 @@ export default function Home() {
 
                                 </span>
 
-                                <span className="item"><CircularProgressWithLabel value={10} /></span>
+                                <span className="item"><CircularProgressWithLabel value={10} color="secondary" /></span>
                                 <span className="item" >
 
                                     <div class="dropdown w-100 h-100">
@@ -516,7 +510,7 @@ export default function Home() {
 
                                 </span>
 
-                                <span className="item"><CircularProgressWithLabel value={100} /></span>
+                                <span className="item"><CircularProgressWithLabel value={100} color="secondary" /></span>
                                 <span className="item" >
 
                                     <div class="dropdown w-100 h-100">
