@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css'
 import { Link } from "react-router-dom";
+import axios from 'axios';
+
 
 const API_HOST_URL = process.env.REACT_APP_KEY || "";
 
@@ -9,17 +12,45 @@ export default function Login() {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [success, setSuccess] = useState('')
+    const [error, setError] = useState('')
+    const navigate = useNavigate();
+
+    const errorMessage = useRef(1)
 
 
-    const handleInput = () => {
+
+    const handleInput = async (event) => {
+        event.preventDefault()
         console.log('email: ' + email)
         console.log('password: ' + password)
-        setEmail('')
-        setPassword('')
+
+
+        const user = {
+            "email": email,
+            "password": password
+        }
+        try {
+            const response = await axios.post("http://localhost:5000/users/verify", user)
+            console.log(response.data[0].userid)
+            if (response.status == 200) {
+
+                errorMessage.current.style.display = 'none'
+                localStorage.setItem('loggedin', 'true');
+                localStorage.setItem('email', email);
+                localStorage.setItem('id', response.data[0].userid);
+
+                /*navigate(`/home/${localStorage.getItem('id')}`);*/
+                navigate('/home')
+            }
+        } catch (err) {
+            console.log(err.response)
+            setError(err.response.data.error)
+            errorMessage.current.style.display = 'block'
+        }
+
+
     }
-
-
-
 
     /* on mount */
     useEffect(() => {
@@ -28,10 +59,6 @@ export default function Login() {
         var copyright = document.getElementById("copyright");
         copyright.innerHTML = '© Shaahid Sheth ' + year;
     }, [])
-
-
-
-
 
     return (
         <div className="login-wrapper">
@@ -43,11 +70,17 @@ export default function Login() {
                         Log in to your account
                     </div>
 
-                    <div className="login-form">
+
+
+                    <div ref={errorMessage} class="alert alert-danger alert-msg" role="alert">
+                        {error}
+                    </div>
+
+                    <form className="login-form" onSubmit={handleInput}>
 
                         <div className="email">
                             <p>Email address</p>
-                            <input autoFocus={true} className="form-control" id="email" name="email" placeholder="Email address"
+                            <input required autoFocus={true} className="form-control" id="email" name="email" placeholder="Email address"
                                 type="email"
                                 onChange={event => setEmail(event.target.value)}
                                 value={email} />
@@ -55,20 +88,20 @@ export default function Login() {
 
                         <div className="password">
                             <p>Password</p>
-                            <input autoComplete="off" className="form-control password" id="password" name="password"
+                            <input required autoComplete="off" className="form-control password" id="password" name="password"
                                 placeholder="Password" type="password"
                                 onChange={event => setPassword(event.target.value)}
                                 value={password} />
 
                         </div>
 
-                        <div className="login">
-                            <div className="button" onClick={handleInput}>
+                        <button className="login w-100" type="submit">
+                            <div className="button">
                                 Log In
                             </div>
-                        </div>
+                        </button>
 
-                    </div>
+                    </form>
 
                     <div className="sign-up">
                         <span style={{ marginRight: '5px' }}>New to this app? </span>

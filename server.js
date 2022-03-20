@@ -82,7 +82,7 @@ function getUserByUserId(userId) {
         const query =
             `
         SELECT * FROM task_manager.users
-        WHERE userId=$1
+        WHERE userId=$1;
         `
         db.query(query, [userId], (err, result) => {
             if (err) {
@@ -97,6 +97,40 @@ function getUserByUserId(userId) {
     return p
 
 }
+
+function getUserByEmailAndPassword(email, password) {
+    const query = `
+    SELECT userId FROM task_manager.users
+    WHERE email=$1 AND password=$2;
+    `
+    const p = new Promise((resolve, reject) => {
+        db.query(query, [email, password], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result.rows)
+            }
+        })
+    })
+    return p
+}
+
+app.post('/users/verify', async (req, res) => {
+    try {
+        const { email, password } = req.body
+        const result = await getUserByEmailAndPassword(email, password)
+        if (result.length == 0) {
+            res.status(400).json({ "error": "incorrect password or email does not exist" })
+        } else {
+            res.status(200).json(result)
+        }
+
+
+
+    } catch (err) {
+        throw err
+    }
+})
 
 app.get('/users/check/:userId', async (req, res) => {
 
