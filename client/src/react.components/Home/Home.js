@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Home.scss'
 import { Button, TextField, Dialog, DialogActions, MenuItem } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/lab';
@@ -11,6 +11,10 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { red } from '@mui/material/colors';
+import moment from "moment";
+import axios from 'axios';
+
+const API_HOST_URL = process.env.REACT_APP_KEY || "";
 
 function CircularProgressWithLabel(props) {
     return (
@@ -47,8 +51,59 @@ CircularProgressWithLabel.propTypes = {
 
 
 export default function Home() {
-    const [open, setOpen] = React.useState(false); /* create-project-form */
-    const [value, setValue] = React.useState(null); /* create-project-form */
+    const [open, setOpen] = useState(false); /* create-project-form */
+    const [projectName, setProjectName] = useState('')
+    const [summary, setSummary] = useState('')
+    const [description, setDescription] = useState('')
+    const [difficulty, setDifficulty] = useState('')
+    const [endDate, setEndDate] = useState(null); /* date */
+
+
+    const createTask = async (event) => {
+        event.preventDefault()
+        console.log(projectName)
+        console.log(summary)
+        console.log(description)
+        console.log(difficulty)
+        console.log(endDate)
+
+        const task = {
+            userId: localStorage.getItem('id'),
+            projectName: projectName,
+            summary: summary,
+            description: description,
+            difficulty: difficulty,
+            priority: 'Low',
+            endDate: endDate,
+            status: "Not active",
+            progress: 0
+        }
+
+        try {
+            const response = await axios.post(`${API_HOST_URL}/create/task`, task)
+            console.log(response)
+            clear()
+            setOpen(false)
+        } catch (err) {
+            console.log(err.response)
+        }
+
+
+
+
+
+
+
+    }
+
+    const clear = () => {
+        setProjectName('')
+        setSummary('')
+        setDescription('')
+        setDifficulty('')
+        setEndDate('')
+    }
+
 
 
     const handleClickOpen = () => {
@@ -62,6 +117,7 @@ export default function Home() {
 
 
 
+
     return (
         <div className="task-wrapper">
 
@@ -69,7 +125,7 @@ export default function Home() {
             { /* create project modal */}
             <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
 
-                <div className="create-project-dialog">
+                <form className="create-project-dialog" onSubmit={createTask}>
 
                     <div className="create-project-header">
                         <span className="title">Create Project</span>
@@ -83,27 +139,18 @@ export default function Home() {
                             <TextField
                                 id="name"
                                 label="Project Name"
-                                type="email"
+                                type="text"
                                 variant="filled"
                                 fullWidth
                                 size="small"
+                                required
+                                inputProps={{ maxLength: 12, minLength: 4 }}
+                                value={projectName}
+                                onChange={(event) => setProjectName(event.target.value)}
+
                             />
                         </div>
 
-
-
-
-                        <div className="item">
-
-                            <TextField
-                                label="Project Type"
-                                type="email"
-                                variant="filled"
-                                fullWidth
-                                size="small"
-                            />
-
-                        </div>
 
                         <div className="chat-break">
                             <div className="line">
@@ -120,6 +167,10 @@ export default function Home() {
                                 fullWidth
                                 variant="outlined"
                                 size="small"
+                                inputProps={{ maxLength: 25 }}
+                                required
+                                value={summary}
+                                onChange={event => setSummary(event.target.value)}
                             />
 
                         </div>
@@ -130,9 +181,12 @@ export default function Home() {
                                 label="Description"
                                 multiline
                                 rows={4}
-
+                                inputProps={{ maxLength: 280 }}
                                 fullWidth
                                 size="small"
+                                required
+                                value={description}
+                                onChange={event => setDescription(event.target.value)}
                             />
                         </div>
 
@@ -144,10 +198,13 @@ export default function Home() {
                                     select
                                     label="Difficulty"
                                     fullWidth
+                                    value={difficulty}
+                                    required
+                                    onChange={e => setDifficulty(e.target.value)}
 
                                 >
 
-                                    <MenuItem value="Very easy">very easy</MenuItem>
+                                    <MenuItem value="very easy">very easy</MenuItem>
                                     <MenuItem value="easy">easy</MenuItem>
                                     <MenuItem value="medium">medium</MenuItem>
                                     <MenuItem value="hard">hard</MenuItem>
@@ -165,9 +222,11 @@ export default function Home() {
                                         disablePast
                                         label="Due date"
                                         inputFormat="MM/dd/yyyy"
-                                        value={value}
-                                        onChange={(newValue) => setValue(newValue)}
-                                        renderInput={(params) => <TextField {...params} fullWidth />}
+                                        value={endDate}
+
+
+                                        onChange={(newValue) => setEndDate(moment(newValue).format("MM/DD/YYYY"))}
+                                        renderInput={(params) => <TextField required {...params} fullWidth />}
 
                                     />
                                 </LocalizationProvider>
@@ -181,9 +240,9 @@ export default function Home() {
 
                     <DialogActions>
                         <Button onClick={handleClose} variant="contained" color="error">Cancel</Button>
-                        <Button onClick={handleClose} variant="contained">Create</Button>
+                        <Button type="submit" variant="contained">Create</Button>
                     </DialogActions>
-                </div>
+                </form>
             </Dialog >
 
 

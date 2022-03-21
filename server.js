@@ -33,6 +33,21 @@ if (process.env.LOCAL_SERVER != undefined) {
         primary key(userId) 
     );
 
+    CREATE TABLE IF NOT EXISTS tasks (
+        taskId SERIAL,
+        userId INT REFERENCES users(userId),
+        projectName varchar(36) NOT NULL,
+        summary varchar(36) NOT NULL,
+        description varchar(300) NOT NULL,
+        difficulty varchar(36) NOT NULL,
+        priority varchar(36) NOT NULL,
+        endDate date NOT NULL,
+        status varchar(36) NOT NULL, 
+        progress INT NOT NULL,
+        PRIMARY KEY (taskId)
+        
+    );
+
     `)
     console.log("reached")
 
@@ -105,6 +120,23 @@ function getUserByEmailAndPassword(email, password) {
     `
     const p = new Promise((resolve, reject) => {
         db.query(query, [email, password], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result.rows)
+            }
+        })
+    })
+    return p
+}
+
+function createTask(userId, projectName, summary, description, difficulty, priority, endDate, status, progress) {
+    const query = `
+    INSERT INTO task_manager.tasks(userId, projectName, summary, description, difficulty, priority, endDate, status, progress) VALUES
+    ($1, $2, $3, $4, $5, $6, $7, $8, $9);
+    `
+    const p = new Promise((resolve, reject) => {
+        db.query(query, [userId, projectName, summary, description, difficulty, priority, endDate, status, progress], (err, result) => {
             if (err) {
                 reject(err)
             } else {
@@ -194,21 +226,18 @@ app.post("/users/registration", async (req, res) => {
 
 
 })
-/*
-app.post("/users/registration", (req, res) => {
 
-    let query = "INSERT INTO users (username, password, role) VALUES ($1, $2, $3)";
-    db.query(query, [req.body.username, req.body.password, req.body.role], (err, result) => {
-        if (err) {
-            throw err;
-        }
-        console.log(result);
-        res.send('post table created...');
-    });
+app.post("/create/task", async (req, res) => {
+    const { userId, projectName, summary, description, difficulty, priority, endDate, status, progress } = req.body
+    try {
+        const result = await createTask(userId, projectName, summary, description, difficulty, priority, endDate, status, progress)
+        res.status(200).json({ "success": "successfully created task" })
 
+    } catch (err) {
+        throw err
+    }
 
-});
-*/
+})
 
 
 
