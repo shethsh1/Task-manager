@@ -53,6 +53,7 @@ CircularProgressWithLabel.propTypes = {
 
 export default function Home() {
     const [open, setOpen] = useState(false); /* create-project-form */
+    const [tasks, setTasks] = useState([])
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -63,7 +64,137 @@ export default function Home() {
     };
 
 
+    const fetchTasks = async () => {
+        const userId = localStorage.getItem('id')
+        console.log(userId)
+        try {
+            const response = await axios.get(`${API_HOST_URL}/get/tasks/${userId}`)
+            console.log(response.data)
+            setTasks(response.data)
+        } catch (err) {
+            console.log(err.response)
+        }
+    }
 
+    /* on mount */
+    useEffect(() => {
+        fetchTasks()
+
+    }, [])
+
+
+    const allTasks = tasks.map(o => {
+
+        return (
+            <div key={o.taskId} class="task-row">
+
+
+                <span className="item-name">{o.projectname}</span>
+                <span className="item">{moment(o.enddate).format("MMMM DD YYYY")}</span>
+                <span className="item">
+
+                    <div class="dropdown w-100 h-100">
+                        <div class="status-fix text-white bg-danger font-weight-normal w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
+                            {o.status}
+                        </div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+                            <div class="drop-item">
+
+                                <span>In Progress</span>
+                                <span style={{ backgroundColor: 'blue', borderRadius: '50%', width: '20px', height: '20px' }}></span>
+                            </div>
+
+                            <div class="drop-item">
+                                <span>Not Active</span>
+                                <span style={{ backgroundColor: 'red', borderRadius: '50%', width: '20px', height: '20px' }}></span>
+                            </div>
+
+                            <div class="drop-item">
+                                <span>Completed</span>
+                                <span style={{ backgroundColor: 'green', borderRadius: '50%', width: '20px', height: '20px' }}></span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </span>
+
+                <span className="item"><CircularProgressWithLabel value={o.progress} color="secondary" /></span>
+                <span className="item" >
+
+                    <div class="dropdown w-100 h-100">
+
+                        <div class="priority-fix w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
+
+                            <div class="priority-order">
+                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
+                                <span>{o.priority}</span>
+                            </div>
+
+                        </div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+                            <div class="drop-item">
+                                <span>Critical</span>
+                                <span style={{ color: 'red' }}><i class="fa-solid fa-flag"></i></span>
+                            </div>
+
+                            <div class="drop-item">
+                                <span>High</span>
+                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
+                            </div>
+
+                            <div class="drop-item">
+                                <span>Medium</span>
+                                <span style={{ color: 'green' }}><i class="fa-solid fa-flag"></i></span>
+                            </div>
+
+                            <div class="drop-item">
+                                <span>Low</span>
+                                <span style={{ color: 'blue' }}><i class="fa-solid fa-flag"></i></span>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+                </span>
+                <span>
+
+                    <div class="btn-group">
+                        <IconButton
+                            id="long-button"
+                            data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
+                        >
+                            <MoreVertIcon />
+                        </IconButton>
+                        <ul class="dropdown-menu dropdown-menu-lg-end">
+
+                            <div class="ellip-tool">
+                                <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
+                                <span>Edit</span>
+                            </div>
+                            <li><hr class="dropdown-divider" /></li>
+                            <div data-bs-toggle="modal" data-bs-target="#deleteTask" class="ellip-tool" style={{ color: "red" }}>
+                                <span class="icon"><i class="fa-solid fa-trash"></i></span>
+                                <span>Delete</span>
+                            </div>
+                        </ul>
+
+                    </div>
+
+
+                </span>
+            </div>
+
+
+
+        )
+    })
 
 
     return (
@@ -71,7 +202,7 @@ export default function Home() {
 
 
             { /* create project modal */}
-            <CreateTask handleClose={handleClose} setOpen={setOpen} open={open} />
+            <CreateTask handleClose={handleClose} setOpen={setOpen} open={open} fetchTasks={fetchTasks} />
 
 
 
@@ -151,320 +282,13 @@ export default function Home() {
 
                             </div>
 
-                            <div class="task-row">
 
 
-                                <span className="item-name">Task 1</span>
-                                <span className="item">
+                            {allTasks}
 
 
 
 
-                                </span>
-                                <span className="item">
-
-                                    <div class="dropdown w-100 h-100">
-                                        <div class="status-fix text-white bg-danger font-weight-normal w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Not Active
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-                                            <div class="drop-item">
-
-                                                <span>In Progress</span>
-                                                <span style={{ backgroundColor: 'blue', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>Not Active</span>
-                                                <span style={{ backgroundColor: 'red', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>Completed</span>
-                                                <span style={{ backgroundColor: 'green', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                </span>
-
-                                <span className="item"><CircularProgressWithLabel value={30} color="secondary" /></span>
-                                <span className="item" >
-
-                                    <div class="dropdown w-100 h-100">
-
-                                        <div class="priority-fix w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
-
-                                            <div class="priority-order">
-                                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
-                                                <span>  High</span>
-                                            </div>
-
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-                                            <div class="drop-item">
-                                                <span>Critical</span>
-                                                <span style={{ color: 'red' }}><i class="fa-solid fa-flag"></i></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>High</span>
-                                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>Medium</span>
-                                                <span style={{ color: 'green' }}><i class="fa-solid fa-flag"></i></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>Low</span>
-                                                <span style={{ color: 'blue' }}><i class="fa-solid fa-flag"></i></span>
-                                            </div>
-
-
-
-                                        </div>
-                                    </div>
-
-
-                                </span>
-                                <span>
-
-                                    <div class="btn-group">
-                                        <IconButton
-                                            id="long-button"
-                                            data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
-                                        >
-                                            <MoreVertIcon />
-                                        </IconButton>
-                                        <ul class="dropdown-menu dropdown-menu-lg-end">
-
-                                            <div class="ellip-tool">
-                                                <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
-                                                <span>Edit</span>
-                                            </div>
-                                            <li><hr class="dropdown-divider" /></li>
-                                            <div data-bs-toggle="modal" data-bs-target="#deleteTask" class="ellip-tool" style={{ color: "red" }}>
-                                                <span class="icon"><i class="fa-solid fa-trash"></i></span>
-                                                <span>Delete</span>
-                                            </div>
-                                        </ul>
-
-                                    </div>
-
-
-                                </span>
-                            </div>
-
-                            <div class="task-row">
-
-                                <span className="item-name">Task 1</span>
-                                <span className="item">3/18/2022</span>
-                                <span className="item">
-
-                                    <div class="dropdown w-100 h-100">
-                                        <div class="status-fix text-white bg-danger font-weight-normal w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Not Active
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-                                            <div class="drop-item">
-
-                                                <span>In Progress</span>
-                                                <span style={{ backgroundColor: 'blue', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>Not Active</span>
-                                                <span style={{ backgroundColor: 'red', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>Completed</span>
-                                                <span style={{ backgroundColor: 'green', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                </span>
-
-                                <span className="item"><CircularProgressWithLabel value={10} color="secondary" /></span>
-                                <span className="item" >
-
-                                    <div class="dropdown w-100 h-100">
-                                        <div class="priority-fix w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <div class="priority-order">
-                                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
-                                                <span>  High</span>
-                                            </div>
-
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-                                            <div class="drop-item">
-                                                <span>Critical</span>
-                                                <span style={{ color: 'red' }}><i class="fa-solid fa-flag"></i></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>High</span>
-                                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>Medium</span>
-                                                <span style={{ color: 'green' }}><i class="fa-solid fa-flag"></i></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>Low</span>
-                                                <span style={{ color: 'blue' }}><i class="fa-solid fa-flag"></i></span>
-                                            </div>
-
-
-
-                                        </div>
-                                    </div>
-
-
-                                </span>
-
-                                <span>
-
-                                    <div class="btn-group">
-                                        <IconButton
-                                            id="long-button"
-                                            data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
-                                        >
-                                            <MoreVertIcon />
-                                        </IconButton>
-                                        <ul class="dropdown-menu dropdown-menu-lg-end">
-
-                                            <div class="ellip-tool">
-                                                <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
-                                                <span>Edit</span>
-                                            </div>
-                                            <li><hr class="dropdown-divider" /></li>
-                                            <div data-bs-toggle="modal" data-bs-target="#deleteTask" class="ellip-tool" style={{ color: "red" }}>
-                                                <span class="icon"><i class="fa-solid fa-trash"></i></span>
-                                                <span>Delete</span>
-                                            </div>
-                                        </ul>
-
-                                    </div>
-
-
-                                </span>
-                            </div>
-
-                            <div class="task-row">
-
-                                <span className="item-name">Task 1</span>
-                                <span className="item">3/18/2022</span>
-                                <span className="item">
-
-                                    <div class="dropdown w-100 h-100">
-                                        <div class="status-fix text-white bg-danger font-weight-normal w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Not Active
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-                                            <div class="drop-item">
-
-                                                <span>In Progress</span>
-                                                <span style={{ backgroundColor: 'blue', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>Not Active</span>
-                                                <span style={{ backgroundColor: 'red', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>Completed</span>
-                                                <span style={{ backgroundColor: 'green', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-                                </span>
-
-                                <span className="item"><CircularProgressWithLabel value={100} color="secondary" /></span>
-                                <span className="item" >
-
-                                    <div class="dropdown w-100 h-100">
-                                        <div class="priority-fix w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <div class="priority-order">
-                                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
-                                                <span>  High</span>
-                                            </div>
-
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-                                            <div class="drop-item">
-                                                <span>Critical</span>
-                                                <span style={{ color: 'red' }}><i class="fa-solid fa-flag"></i></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>High</span>
-                                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>Medium</span>
-                                                <span style={{ color: 'green' }}><i class="fa-solid fa-flag"></i></span>
-                                            </div>
-
-                                            <div class="drop-item">
-                                                <span>Low</span>
-                                                <span style={{ color: 'blue' }}><i class="fa-solid fa-flag"></i></span>
-                                            </div>
-
-
-
-                                        </div>
-                                    </div>
-
-
-                                </span>
-
-                                <span>
-
-                                    <div class="btn-group">
-                                        <IconButton
-                                            id="long-button"
-                                            data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
-                                        >
-                                            <MoreVertIcon />
-                                        </IconButton>
-                                        <ul class="dropdown-menu dropdown-menu-lg-end">
-
-                                            <div class="ellip-tool">
-                                                <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
-                                                <span>Edit</span>
-                                            </div>
-                                            <li><hr class="dropdown-divider" /></li>
-                                            <div data-bs-toggle="modal" data-bs-target="#deleteTask" class="ellip-tool" style={{ color: "red" }}>
-                                                <span class="icon"><i class="fa-solid fa-trash"></i></span>
-                                                <span>Delete</span>
-                                            </div>
-                                        </ul>
-
-                                    </div>
-
-                                </span>
-                            </div>
                         </div>
 
                     </div>

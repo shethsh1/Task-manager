@@ -42,6 +42,8 @@ function CreateTask(props) {
             console.log(response)
             clear()
             setOpen(false)
+            fetchTasks()
+
         } catch (err) {
             console.log(err.response)
         }
@@ -62,7 +64,7 @@ function CreateTask(props) {
         setEndDate('')
     }
 
-    const { handleClose, setOpen, open } = props
+    const { handleClose, setOpen, open, fetchTasks } = props
 
     return (
         <>

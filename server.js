@@ -147,6 +147,25 @@ function createTask(userId, projectName, summary, description, difficulty, prior
     return p
 }
 
+function getAllTasksWithUserId(userId) {
+    const query = `
+    SELECT taskId, projectName, summary, description, difficulty, priority, endDate, status, progress 
+    FROM task_manager.tasks
+    WHERE userId=$1
+    ORDER BY taskId DESC;
+    `
+    const p = new Promise((resolve, reject) => {
+        db.query(query, [userId], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result.rows)
+            }
+        })
+    })
+    return p
+}
+
 app.post('/users/verify', async (req, res) => {
     try {
         const { email, password } = req.body
@@ -237,6 +256,17 @@ app.post("/create/task", async (req, res) => {
         throw err
     }
 
+})
+
+app.get("/get/tasks/:userId", async (req, res) => {
+    const { userId } = req.params
+    try {
+        const result = await getAllTasksWithUserId(userId)
+        res.status(200).json(result)
+
+    } catch (err) {
+        throw err
+    }
 })
 
 
