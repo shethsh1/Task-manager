@@ -16,6 +16,7 @@ import axios from 'axios';
 import CreateTask from './CreateTask'
 import DeleteTask from './DeleteTask'
 import UpdateStatus from './UpdateStatus'
+import UpdatePriority from './UpdatePriority'
 
 const API_HOST_URL = process.env.REACT_APP_KEY || "";
 
@@ -101,6 +102,9 @@ export default function Home() {
 
 
 
+
+
+
     const allTasks = tasks.map(o => {
 
         return (
@@ -113,47 +117,8 @@ export default function Home() {
 
 
                 <span className="item"><CircularProgressWithLabel value={o.progress} color="secondary" /></span>
-                <span className="item" >
+                <UpdatePriority fetchTasks={fetchTasks} o={o} />
 
-                    <div class="dropdown w-100 h-100">
-
-                        <div class="priority-fix w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
-
-                            <div class="priority-order">
-                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
-                                <span>{o.priority}</span>
-                            </div>
-
-                        </div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-                            <div class="drop-item">
-                                <span>Critical</span>
-                                <span style={{ color: 'red' }}><i class="fa-solid fa-flag"></i></span>
-                            </div>
-
-                            <div class="drop-item">
-                                <span>High</span>
-                                <span style={{ color: 'orange' }}><i class="fa-solid fa-flag"></i></span>
-                            </div>
-
-                            <div class="drop-item">
-                                <span>Medium</span>
-                                <span style={{ color: 'green' }}><i class="fa-solid fa-flag"></i></span>
-                            </div>
-
-                            <div class="drop-item">
-                                <span>Low</span>
-                                <span style={{ color: 'blue' }}><i class="fa-solid fa-flag"></i></span>
-                            </div>
-
-
-
-                        </div>
-                    </div>
-
-
-                </span>
                 <span>
 
                     <div class="btn-group">
@@ -180,7 +145,7 @@ export default function Home() {
 
 
                 </span>
-            </div>
+            </div >
 
 
 

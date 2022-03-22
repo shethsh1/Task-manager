@@ -33,7 +33,7 @@ function CreateTask(props) {
             difficulty: difficulty,
             priority: 'Low',
             endDate: endDate,
-            status: "Not active",
+            status: "Not Active",
             progress: 0
         }
 

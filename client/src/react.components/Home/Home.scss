@@ -3,6 +3,19 @@ $maincolor: #664986;
 $inProgress: rgb(255, 255, 255);
 $completed: rgb(77, 215, 120);
 
+$critical: rgb(255, 235, 235);
+$high: rgb(255, 235, 235);
+$medium: rgb(241, 251, 235);
+$low: rgb(229, 247, 255);
+
+:root {
+    --critical: rgb(255, 235, 235);
+    --high: rgb(255, 235, 235);
+    --medium: rgb(241, 251, 235);
+    --low: rgb(229, 247, 255);
+
+}
+
 
 .task-wrapper {
 
@@ -156,10 +169,8 @@ $completed: rgb(77, 215, 120);
         .task-row .priority-fix {
             display: flex;
             justify-content: center;
+            width: 100%;
             align-items: center;
-            background-color: #f6c66e5e;
-            color: orange;
-            font-weight: bold;
         }
 
         .task-row .item-name {
