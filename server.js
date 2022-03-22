@@ -22,6 +22,9 @@ if (process.env.LOCAL_SERVER != undefined) {
     });
 
     db.query(`
+
+    CREATE SCHEMA IF NOT EXISTS task_manager;
+
     SET search_path TO task_manager;
 
     CREATE TABLE IF NOT EXISTS users (
@@ -63,6 +66,38 @@ if (process.env.LOCAL_SERVER != undefined) {
             rejectUnauthorized: false,
         }
     });
+
+    db.query(`
+
+    CREATE SCHEMA IF NOT EXISTS task_manager;
+
+    SET search_path TO task_manager;
+
+    CREATE TABLE IF NOT EXISTS users (
+        userId SERIAL,
+        first_name varchar(36) NOT NULL,
+        last_name varchar(36) NOT NULL,
+        email varchar(36) NOT NULL UNIQUE,
+        password varchar(36) NOT NULL,
+        primary key(userId) 
+    );
+
+    CREATE TABLE IF NOT EXISTS tasks (
+        taskId SERIAL,
+        userId INT REFERENCES users(userId),
+        projectName varchar(36) NOT NULL,
+        summary varchar(36) NOT NULL,
+        description varchar(300) NOT NULL,
+        difficulty varchar(36) NOT NULL,
+        priority varchar(36) NOT NULL,
+        endDate date NOT NULL,
+        status varchar(36) NOT NULL, 
+        progress INT NOT NULL,
+        PRIMARY KEY (taskId)
+        
+    );
+
+    `)
 
 
 
