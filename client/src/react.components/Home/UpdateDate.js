@@ -10,7 +10,7 @@ const API_HOST_URL = process.env.REACT_APP_KEY || "";
 
 export default function UpdateStatus(props) {
 
-    const [date, setDate] = useState(new Date());
+
 
     const updateDate = async (taskId, newDate) => {
 

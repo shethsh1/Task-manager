@@ -18,6 +18,9 @@ import DeleteTask from './DeleteTask'
 import UpdateStatus from './UpdateStatus'
 import UpdatePriority from './UpdatePriority'
 import UpdateDate from './UpdateDate'
+import UpdateProgress from './UpdateProgress';
+import pencil from '../../assets/edit-pencil.svg'
+
 
 
 const API_HOST_URL = process.env.REACT_APP_KEY || "";
@@ -26,38 +29,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function CircularProgressWithLabel(props) {
-    return (
-        <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-            <CircularProgress variant="determinate" {...props} />
-            <Box
-                sx={{
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                    position: 'absolute',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
-            >
-                <Typography variant="caption" component="div" color="text.primary">
-                    {`${Math.round(props.value)}%`}
-                </Typography>
-            </Box>
-        </Box>
-    );
-}
 
-CircularProgressWithLabel.propTypes = {
-    /**
-     * The value of the progress indicator for the determinate variant.
-     * Value between 0 and 100.
-     * @default 0
-     */
-    value: PropTypes.number.isRequired,
-};
 
 
 export default function Home() {
@@ -66,7 +38,9 @@ export default function Home() {
     const deleteTaskId = useRef(-1) /* deleteTask */
 
 
-    const [date, setDate] = useState(new Date());
+
+
+
 
 
 
@@ -107,17 +81,9 @@ export default function Home() {
     }
 
 
-
-
-
-
-
-
-
-
-
-
     const allTasks = tasks.map(o => {
+
+
 
         return (
             <div key={o.taskid} class="task-row">
@@ -126,9 +92,7 @@ export default function Home() {
                 <span className="item-name">{o.projectname}</span>
                 <UpdateDate fetchTasks={fetchTasks} o={o} />
                 <UpdateStatus fetchTasks={fetchTasks} o={o} />
-
-
-                <span className="item"><CircularProgressWithLabel value={o.progress} color="secondary" /></span>
+                <UpdateProgress fetchTasks={fetchTasks} o={o} />
                 <UpdatePriority fetchTasks={fetchTasks} o={o} />
 
                 <span>
