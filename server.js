@@ -113,6 +113,8 @@ function getUserByUserId(userId) {
 
 }
 
+
+
 function getUserByEmailAndPassword(email, password) {
     const query = `
     SELECT userId FROM task_manager.users
@@ -156,6 +158,23 @@ function getAllTasksWithUserId(userId) {
     `
     const p = new Promise((resolve, reject) => {
         db.query(query, [userId], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result.rows)
+            }
+        })
+    })
+    return p
+}
+
+function deleteTaskByUserIdAndTaskId(userId, taskId) {
+    const p = new Promise((resolve, reject) => {
+        const query = `
+        DELETE FROM task_manager.tasks
+        WHERE userId=$1 AND taskId=$2;
+        `
+        db.query(query, [userId, taskId], (err, result) => {
             if (err) {
                 reject(err)
             } else {
@@ -267,6 +286,18 @@ app.get("/get/tasks/:userId", async (req, res) => {
     } catch (err) {
         throw err
     }
+})
+
+app.delete("/delete/task/:userId/:taskId", async (req, res) => {
+    const { userId, taskId } = req.params
+
+    try {
+        const result = await deleteTaskByUserIdAndTaskId(userId, taskId)
+        res.status(200).json({ "success": "successfully deleted task" })
+    } catch (err) {
+        throw err
+    }
+
 })
 
 

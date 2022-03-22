@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import './Home.scss'
 import { Button, TextField, Dialog, DialogActions, MenuItem } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/lab';
@@ -14,6 +14,7 @@ import { red } from '@mui/material/colors';
 import moment from "moment";
 import axios from 'axios';
 import CreateTask from './CreateTask'
+import DeleteTask from './DeleteTask'
 
 const API_HOST_URL = process.env.REACT_APP_KEY || "";
 
@@ -54,6 +55,7 @@ CircularProgressWithLabel.propTypes = {
 export default function Home() {
     const [open, setOpen] = useState(false); /* create-project-form */
     const [tasks, setTasks] = useState([])
+    const deleteTaskId = useRef(-1) /* deleteTask */
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -62,6 +64,11 @@ export default function Home() {
     const handleClose = () => {
         setOpen(false);
     };
+
+    /* deleteTask */
+    const setDeleteTaskId = (taskId) => {
+        deleteTaskId.current = taskId
+    }
 
 
     const fetchTasks = async () => {
@@ -83,10 +90,12 @@ export default function Home() {
     }, [])
 
 
+
+
     const allTasks = tasks.map(o => {
 
         return (
-            <div key={o.taskId} class="task-row">
+            <div key={o.taskid} class="task-row">
 
 
                 <span className="item-name">{o.projectname}</span>
@@ -179,7 +188,7 @@ export default function Home() {
                                 <span>Edit</span>
                             </div>
                             <li><hr class="dropdown-divider" /></li>
-                            <div data-bs-toggle="modal" data-bs-target="#deleteTask" class="ellip-tool" style={{ color: "red" }}>
+                            <div onClick={() => setDeleteTaskId(o.taskid)} data-bs-toggle="modal" data-bs-target="#deleteTask" class="ellip-tool" style={{ color: "red" }}>
                                 <span class="icon"><i class="fa-solid fa-trash"></i></span>
                                 <span>Delete</span>
                             </div>
@@ -207,34 +216,8 @@ export default function Home() {
 
 
             {/* delete task modal */}
-            <div class="modal fade" id="deleteTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
+            <DeleteTask deleteTaskId={deleteTaskId} fetchTasks={fetchTasks} />
 
-                            <div class="garbage">
-                                <div class="garbage-icon">
-                                    <span class="edit"><i class="fa-regular fa-trash-can"></i></span>
-                                </div>
-                            </div>
-
-                            <div class="fw-bold text-center">
-                                Are you sure you want to delete this task?
-
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-danger">Delete</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
 
 
