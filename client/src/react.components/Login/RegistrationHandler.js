@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios'
+
+const API_HOST_URL = process.env.REACT_APP_KEY || "";
+
 function RegistrationHandler(props) {
 
     const [firstName, setFirstName] = useState('')
@@ -24,7 +27,7 @@ function RegistrationHandler(props) {
             password: password
         }
         try {
-            const response = await axios.post('http://localhost:5000/users/registration', user)
+            const response = await axios.post(`${API_HOST_URL}/users/registration`, user)
 
             if (response.status == 200) {
                 setSuccess("Successfully created account")

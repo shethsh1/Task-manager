@@ -31,7 +31,7 @@ export default function Login() {
             "password": password
         }
         try {
-            const response = await axios.post("http://localhost:5000/users/verify", user)
+            const response = await axios.post(`${API_HOST_URL}/users/verify`, user)
             console.log(response.data[0].userid)
             if (response.status == 200) {
 
