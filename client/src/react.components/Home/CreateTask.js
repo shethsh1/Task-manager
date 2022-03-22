@@ -169,6 +169,8 @@ function CreateTask(props) {
                                         label="Due date"
                                         inputFormat="MM/dd/yyyy"
                                         value={endDate}
+                                        type="date"
+                                        invalidDateMessage={"End date is required"}
 
 
                                         onChange={(newValue) => setEndDate(moment(newValue).format("MM/DD/YYYY"))}

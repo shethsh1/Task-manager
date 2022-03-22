@@ -115,6 +115,8 @@ function getUserByUserId(userId) {
 
 
 
+
+
 function getUserByEmailAndPassword(email, password) {
     const query = `
     SELECT userId FROM task_manager.users
@@ -183,6 +185,25 @@ function deleteTaskByUserIdAndTaskId(userId, taskId) {
         })
     })
     return p
+}
+
+function UpdateTaskWithTaskId(taskId, columnName, newValue) {
+    const p = new Promise((resolve, reject) => {
+        const query = `
+        UPDATE task_manager.tasks
+        SET ${columnName}= $2
+        WHERE taskId=$1;
+        `
+        db.query(query, [taskId, newValue], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result)
+            }
+        })
+    })
+    return p
+
 }
 
 app.post('/users/verify', async (req, res) => {
@@ -298,6 +319,17 @@ app.delete("/delete/task/:userId/:taskId", async (req, res) => {
         throw err
     }
 
+})
+
+app.post("/update/task", async (req, res) => {
+    const { taskId, columnName, newValue } = req.body
+    try {
+        const result = await UpdateTaskWithTaskId(taskId, columnName, newValue)
+        res.status(200).json({ "success": "successfully updated task" })
+
+    } catch (err) {
+        throw err
+    }
 })
 
 

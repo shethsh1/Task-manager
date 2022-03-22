@@ -15,8 +15,13 @@ import moment from "moment";
 import axios from 'axios';
 import CreateTask from './CreateTask'
 import DeleteTask from './DeleteTask'
+import UpdateStatus from './UpdateStatus'
 
 const API_HOST_URL = process.env.REACT_APP_KEY || "";
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 function CircularProgressWithLabel(props) {
     return (
@@ -54,8 +59,14 @@ CircularProgressWithLabel.propTypes = {
 
 export default function Home() {
     const [open, setOpen] = useState(false); /* create-project-form */
-    const [tasks, setTasks] = useState([])
+    const [tasks, setTasks] = useState([]) /* fetch tasks */
     const deleteTaskId = useRef(-1) /* deleteTask */
+
+    /* on mount */
+    useEffect(() => {
+        fetchTasks()
+
+    }, [])
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -76,6 +87,7 @@ export default function Home() {
         console.log(userId)
         try {
             const response = await axios.get(`${API_HOST_URL}/get/tasks/${userId}`)
+            console.log("fetch-data")
             console.log(response.data)
             setTasks(response.data)
         } catch (err) {
@@ -83,11 +95,8 @@ export default function Home() {
         }
     }
 
-    /* on mount */
-    useEffect(() => {
-        fetchTasks()
 
-    }, [])
+
 
 
 
@@ -100,35 +109,8 @@ export default function Home() {
 
                 <span className="item-name">{o.projectname}</span>
                 <span className="item">{moment(o.enddate).format("MMMM DD YYYY")}</span>
-                <span className="item">
+                <UpdateStatus fetchTasks={fetchTasks} o={o} />
 
-                    <div class="dropdown w-100 h-100">
-                        <div class="status-fix text-white bg-danger font-weight-normal w-100 h-100" data-bs-toggle="dropdown" aria-expanded="false">
-                            {o.status}
-                        </div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-                            <div class="drop-item">
-
-                                <span>In Progress</span>
-                                <span style={{ backgroundColor: 'blue', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                            </div>
-
-                            <div class="drop-item">
-                                <span>Not Active</span>
-                                <span style={{ backgroundColor: 'red', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                            </div>
-
-                            <div class="drop-item">
-                                <span>Completed</span>
-                                <span style={{ backgroundColor: 'green', borderRadius: '50%', width: '20px', height: '20px' }}></span>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                </span>
 
                 <span className="item"><CircularProgressWithLabel value={o.progress} color="secondary" /></span>
                 <span className="item" >
