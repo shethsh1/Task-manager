@@ -17,6 +17,8 @@ import CreateTask from './CreateTask'
 import DeleteTask from './DeleteTask'
 import UpdateStatus from './UpdateStatus'
 import UpdatePriority from './UpdatePriority'
+import UpdateDate from './UpdateDate'
+
 
 const API_HOST_URL = process.env.REACT_APP_KEY || "";
 
@@ -63,6 +65,12 @@ export default function Home() {
     const [tasks, setTasks] = useState([]) /* fetch tasks */
     const deleteTaskId = useRef(-1) /* deleteTask */
 
+
+    const [date, setDate] = useState(new Date());
+
+
+
+
     /* on mount */
     useEffect(() => {
         fetchTasks()
@@ -81,6 +89,8 @@ export default function Home() {
     const setDeleteTaskId = (taskId) => {
         deleteTaskId.current = taskId
     }
+
+
 
 
     const fetchTasks = async () => {
@@ -105,6 +115,8 @@ export default function Home() {
 
 
 
+
+
     const allTasks = tasks.map(o => {
 
         return (
@@ -112,7 +124,7 @@ export default function Home() {
 
 
                 <span className="item-name">{o.projectname}</span>
-                <span className="item">{moment(o.enddate).format("MMMM DD YYYY")}</span>
+                <UpdateDate fetchTasks={fetchTasks} o={o} />
                 <UpdateStatus fetchTasks={fetchTasks} o={o} />
 
 
