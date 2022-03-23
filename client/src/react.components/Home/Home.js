@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom';
 import './Home.scss'
 import { Button, TextField, Dialog, DialogActions, MenuItem } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/lab';
@@ -33,20 +34,36 @@ function sleep(ms) {
 
 
 export default function Home() {
+    const [loading, setLoading] = useState(true)
     const [open, setOpen] = useState(false); /* create-project-form */
     const [tasks, setTasks] = useState([]) /* fetch tasks */
     const deleteTaskId = useRef(-1) /* deleteTask */
+    const navigate = useNavigate();
 
 
 
 
 
+
+
+    const logout = () => {
+        localStorage.removeItem('id')
+        localStorage.removeItem('email')
+        navigate("/login")
+
+
+    }
 
 
 
 
     /* on mount */
     useEffect(() => {
+        if (localStorage.getItem('id') == undefined) {
+            navigate("/login")
+            return
+        }
+        setLoading(false)
         fetchTasks()
 
     }, [])
@@ -129,6 +146,10 @@ export default function Home() {
     })
 
 
+    if (loading) {
+        return <></>
+    }
+
     return (
         <div className="task-wrapper">
 
@@ -152,7 +173,7 @@ export default function Home() {
                             <li className="item"><span><i className="fa fa-star icon"> </i>Favorites</span></li>
                             <li className="item"><span><i className="fa fa-calendar icon"> </i>Upcoming</span></li>
                             <li className="item"><span><i className="fa fa-hashtag icon"> </i>Important</span></li>
-                            <li className="item"><span><i className="fa fa-trash icon"> </i>Trash</span></li>
+                            <li onClick={logout} className="item"><span><i class="fa-solid fa-arrow-right-from-bracket icon"></i>Logout</span></li>
                         </div>
 
 

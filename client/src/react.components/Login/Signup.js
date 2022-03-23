@@ -1,15 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './Login.css'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import axios from 'axios'
 import RegistrationHandler from './RegistrationHandler';
+import { useNavigate } from 'react-router-dom';
+
 
 const API_HOST_URL = process.env.REACT_APP_KEY || "";
 
 
 export default function Signup() {
+    const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
+    const navigate = useNavigate()
 
     const successMessage = useRef(1)
     const errorMessage = useRef(1)
@@ -17,11 +21,20 @@ export default function Signup() {
 
 
     useEffect(() => {
-        var today = new Date();
-        var year = today.getFullYear();
-        var copyright = document.getElementById("copyright");
-        copyright.innerHTML = '© Shaahid Sheth ' + year;
+
+        if (localStorage.getItem('id') != undefined) {
+            navigate('/home')
+            return
+        }
+
+        setLoading(false)
+
     }, [])
+
+
+    if (loading) {
+        return <></>
+    }
 
 
 
@@ -61,7 +74,7 @@ export default function Signup() {
                 </div>
             </div>
             <div className="login-footer">
-                <span id="copyright"></span>
+                <span id="copyright">© Shaahid Sheth {new Date().getFullYear()}</span>
             </div>
         </div>
     )

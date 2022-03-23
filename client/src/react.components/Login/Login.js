@@ -9,7 +9,7 @@ const API_HOST_URL = process.env.REACT_APP_KEY || "";
 
 
 export default function Login() {
-
+    const [loading, setLoading] = useState(true)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [success, setSuccess] = useState('')
@@ -17,6 +17,7 @@ export default function Login() {
     const navigate = useNavigate();
 
     const errorMessage = useRef(1)
+
 
 
 
@@ -36,7 +37,6 @@ export default function Login() {
             if (response.status == 200) {
 
                 errorMessage.current.style.display = 'none'
-                localStorage.setItem('loggedin', 'true');
                 localStorage.setItem('email', email);
                 localStorage.setItem('id', response.data[0].userid);
 
@@ -52,13 +52,25 @@ export default function Login() {
 
     }
 
-    /* on mount */
+    /* on mount (directly after 1st render) */
     useEffect(() => {
-        var today = new Date();
-        var year = today.getFullYear();
-        var copyright = document.getElementById("copyright");
-        copyright.innerHTML = '© Shaahid Sheth ' + year;
+
+        if (localStorage.getItem('id') != undefined) {
+            navigate("/home")
+            return
+        }
+        setLoading(false)
+
     }, [])
+
+
+
+
+    if (loading) {
+        return <></>
+    }
+
+
 
     return (
         <div className="login-wrapper">
@@ -113,7 +125,7 @@ export default function Login() {
                 </div>
             </div>
             <div className="login-footer">
-                <span id="copyright"></span>
+                <span id="copyright">© Shaahid Sheth {new Date().getFullYear()}</span>
             </div>
         </div>
     )
