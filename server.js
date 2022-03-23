@@ -241,6 +241,25 @@ function UpdateTaskWithTaskId(taskId, columnName, newValue) {
 
 }
 
+function UpdateTaskWithAllProps(taskId, projectName, summary, description, difficulty, priority, enddate, status, progress) {
+    const p = new Promise((resolve, reject) => {
+        const query = `
+        UPDATE task_manager.tasks
+        SET projectName=$1, summary=$2, description=$3, difficulty=$4, priority=$5, enddate=$6, status=$7, progress=$8
+        WHERE taskId=$9;
+        `
+        db.query(query, [projectName, summary, description, difficulty, priority, enddate, status, progress, taskId], (err, result) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(result)
+            }
+        })
+    })
+    return p
+
+}
+
 app.post('/users/verify', async (req, res) => {
     try {
         const { email, password } = req.body
@@ -360,6 +379,17 @@ app.post("/update/task", async (req, res) => {
     const { taskId, columnName, newValue } = req.body
     try {
         const result = await UpdateTaskWithTaskId(taskId, columnName, newValue)
+        res.status(200).json({ "success": "successfully updated task" })
+
+    } catch (err) {
+        throw err
+    }
+})
+
+app.post("/update/allTask", async (req, res) => {
+    const { taskId, projectName, summary, description, difficulty, priority, endDate, status, progress } = req.body
+    try {
+        const result = await UpdateTaskWithAllProps(taskId, projectName, summary, description, difficulty, priority, endDate, status, progress)
         res.status(200).json({ "success": "successfully updated task" })
 
     } catch (err) {

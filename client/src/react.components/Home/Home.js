@@ -20,7 +20,9 @@ import UpdateStatus from './UpdateStatus'
 import UpdatePriority from './UpdatePriority'
 import UpdateDate from './UpdateDate'
 import UpdateProgress from './UpdateProgress';
-import pencil from '../../assets/edit-pencil.svg'
+import EditTasksModal from './EditTasksModal';
+
+
 
 
 
@@ -34,16 +36,18 @@ function sleep(ms) {
 
 
 export default function Home() {
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true) /* fully loaded (render -> useEffect -> render) */
     const [open, setOpen] = useState(false); /* create-project-form */
     const [tasks, setTasks] = useState([]) /* fetch tasks */
     const deleteTaskId = useRef(-1) /* deleteTask */
     const navigate = useNavigate();
+    const objects = useRef(-1) /* EditTasksModal */
 
 
+    const setFieldsForModal = (o) => {
+        objects.current = o
 
-
-
+    }
 
 
     const logout = () => {
@@ -63,6 +67,7 @@ export default function Home() {
             navigate("/login")
             return
         }
+        console.log("reached")
         setLoading(false)
         fetchTasks()
 
@@ -86,7 +91,7 @@ export default function Home() {
 
     const fetchTasks = async () => {
         const userId = localStorage.getItem('id')
-        console.log(userId)
+
         try {
             const response = await axios.get(`${API_HOST_URL}/get/tasks/${userId}`)
             console.log("fetch-data")
@@ -101,9 +106,12 @@ export default function Home() {
     const allTasks = tasks.map(o => {
 
 
-
+        console.log("re-rendering")
         return (
             <div key={o.taskid} class="task-row">
+
+                {/* edit tasks modal */}
+                <EditTasksModal o={o} fetchTasks={fetchTasks} />
 
 
                 <span className="item-name">{o.projectname}</span>
@@ -123,7 +131,7 @@ export default function Home() {
                         </IconButton>
                         <ul class="dropdown-menu dropdown-menu-lg-end">
 
-                            <div class="ellip-tool">
+                            <div data-bs-toggle="modal" data-bs-target="#editAllTask" class="ellip-tool">
                                 <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
                                 <span>Edit</span>
                             </div>
@@ -154,6 +162,8 @@ export default function Home() {
         <div className="task-wrapper">
 
 
+
+
             { /* create project modal */}
             <CreateTask handleClose={handleClose} setOpen={setOpen} open={open} fetchTasks={fetchTasks} />
 
@@ -161,6 +171,11 @@ export default function Home() {
 
             {/* delete task modal */}
             <DeleteTask deleteTaskId={deleteTaskId} fetchTasks={fetchTasks} />
+
+
+
+
+
 
 
 
