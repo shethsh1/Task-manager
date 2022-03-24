@@ -47,6 +47,7 @@ if (process.env.LOCAL_SERVER != undefined) {
         endDate date NOT NULL,
         status varchar(36) NOT NULL, 
         progress INT NOT NULL,
+        favorite boolean NOT NULL,
         PRIMARY KEY (taskId)
         
     );
@@ -171,8 +172,8 @@ function getUserByEmailAndPassword(email, password) {
 
 function createTask(userId, projectName, summary, description, difficulty, priority, endDate, status, progress) {
     const query = `
-    INSERT INTO task_manager.tasks(userId, projectName, summary, description, difficulty, priority, endDate, status, progress) VALUES
-    ($1, $2, $3, $4, $5, $6, $7, $8, $9);
+    INSERT INTO task_manager.tasks(userId, projectName, summary, description, difficulty, priority, endDate, status, progress, favorite) VALUES
+    ($1, $2, $3, $4, $5, $6, $7, $8, $9, false);
     `
     const p = new Promise((resolve, reject) => {
         db.query(query, [userId, projectName, summary, description, difficulty, priority, endDate, status, progress], (err, result) => {
@@ -188,7 +189,7 @@ function createTask(userId, projectName, summary, description, difficulty, prior
 
 function getAllTasksWithUserId(userId) {
     const query = `
-    SELECT taskId, projectName, summary, description, difficulty, priority, endDate, status, progress 
+    SELECT taskId, projectName, summary, description, difficulty, priority, endDate, status, progress, favorite 
     FROM task_manager.tasks
     WHERE userId=$1
     ORDER BY taskId DESC;

@@ -6,11 +6,8 @@ import Signup from './react.components/Login/Signup'
 import Home from './react.components/Home/Home'
 import { Navigate } from 'react-router-dom';
 
+
 function App() {
-
-  const curUser = localStorage.getItem("id")
-
-
 
   return (
     <BrowserRouter>

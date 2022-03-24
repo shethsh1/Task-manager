@@ -471,18 +471,22 @@ $low: rgb(229, 247, 255);
 @media only screen and (max-width: 742.5px) {
     .task-manager {
         
-        padding: 20px;
+
 
         grid-template-columns: 1fr;
-        grid-template-rows:  4fr 2fr;
+        grid-template-rows:  1fr 8fr;
         grid-template-areas:
             "c"
-            "r";
+            "c";
+        overflow: auto
+        
 
     }
-    .right-bar {
-        overflow: visible;
+
+    .page-content {
+        min-width: 650px;
     }
+
 
     .left-bar {
         display: none;

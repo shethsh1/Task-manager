@@ -20,9 +20,12 @@ import UpdateStatus from './UpdateStatus'
 import UpdatePriority from './UpdatePriority'
 import UpdateDate from './UpdateDate'
 import UpdateProgress from './UpdateProgress';
+import UpdateFavorite from './updateFavorite'
 import EditTasksModal from './EditTasksModal';
 import logo from '../../assets/cc2.png'
 import { useParams } from "react-router-dom";
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
 
 
 
@@ -65,12 +68,13 @@ export default function Home() {
 
     const toFavorites = () => {
         navigate("/home/favorites")
+        setOptionalFilter("favorite")
     }
 
     const toUpcoming = () => {
         navigate("/home/upcoming")
         setOptionalFilter("upcoming")
-        fetchTasks()
+
 
 
 
@@ -80,7 +84,7 @@ export default function Home() {
     const toProjects = () => {
         navigate("/home")
         setOptionalFilter("")
-        fetchTasks()
+
     }
 
 
@@ -121,7 +125,11 @@ export default function Home() {
         }
 
 
-
+        if (params.name === "favorites") {
+            setOptionalFilter("favorite")
+        } else if (params.name === "upcoming") {
+            setOptionalFilter("upcoming")
+        }
         setLoading(false)
         fetchTasks()
 
@@ -147,6 +155,8 @@ export default function Home() {
 
 
 
+
+
     const fetchTasks = async () => {
         const userId = localStorage.getItem('id')
 
@@ -164,6 +174,11 @@ export default function Home() {
                 })
 
             }
+            if (optionalFilter === "favorite") {
+                filter = response.data.filter((o) => {
+                    return o.favorite === true
+                })
+            }
             setTasks(filter)
         } catch (err) {
             console.log(err.response)
@@ -174,15 +189,23 @@ export default function Home() {
     const allTasks = tasks.map(o => {
 
 
-        console.log("re-rendering")
+        console.log(o)
         return (
             <div key={o.taskid} class="task-row">
+
+
+
 
                 {/* edit tasks modal */}
                 <EditTasksModal o={o} fetchTasks={fetchTasks} />
 
 
-                <span className="item-name">{o.projectname}</span>
+                <span style={{ display: 'flex' }} className="item-name">
+
+                    <UpdateFavorite o={o} fetchTasks={fetchTasks} />
+                    {o.projectname}
+
+                </span>
                 <UpdateDate fetchTasks={fetchTasks} o={o} />
                 <UpdateStatus fetchTasks={fetchTasks} o={o} />
                 <UpdateProgress fetchTasks={fetchTasks} o={o} />
