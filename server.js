@@ -29,8 +29,7 @@ if (process.env.LOCAL_SERVER != undefined) {
     
 
     SET search_path TO task_manager;
-    drop table if exists tasks;
-    drop table if exists users;
+
 
     CREATE TABLE IF NOT EXISTS users (
         userId SERIAL,
@@ -78,8 +77,7 @@ if (process.env.LOCAL_SERVER != undefined) {
     CREATE SCHEMA IF NOT EXISTS task_manager;
 
     SET search_path TO task_manager;
-    drop table if exists tasks;
-    drop table if exists users;
+
 
     CREATE TABLE IF NOT EXISTS users (
         userId SERIAL,
@@ -101,6 +99,7 @@ if (process.env.LOCAL_SERVER != undefined) {
         endDate date NOT NULL,
         status varchar(36) NOT NULL, 
         progress INT NOT NULL,
+        favorite boolean NOT NULL,
         PRIMARY KEY (taskId)
         
     );
