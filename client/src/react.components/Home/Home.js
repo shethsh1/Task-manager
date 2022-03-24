@@ -22,7 +22,6 @@ import UpdateDate from './UpdateDate'
 import UpdateProgress from './UpdateProgress';
 import UpdateFavorite from './updateFavorite'
 import EditTasksModal from './EditTasksModal';
-import logo from '../../assets/cc2.png'
 import { useParams } from "react-router-dom";
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
@@ -276,7 +275,7 @@ export default function Home() {
 
                     <div className="left-content">
                         <div class="logo">
-                            <img src={logo} />
+                            <img src={'https://res.cloudinary.com/dudegkgw9/image/upload/v1648101937/cc2_wey23o.png'} />
                         </div>
                         <div className="action-list">
                             {params.name == undefined ?
