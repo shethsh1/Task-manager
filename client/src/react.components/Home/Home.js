@@ -51,9 +51,34 @@ export default function Home() {
     const [optionalFilter, setOptionalFilter] = useState('')
 
 
+    /* on mount */
+    useEffect(() => {
+
+
+
+        if (localStorage.getItem('id') == undefined) {
+            navigate("/login")
+            return
+        }
+
+
+        if (params.name === "favorites") {
+            setOptionalFilter("favorite")
+        } else if (params.name === "upcoming") {
+            setOptionalFilter("upcoming")
+        }
+        setLoading(false)
+        fetchTasks()
+
+    }, [])
+
+
 
     useEffect(() => {
-        fetchTasks()
+        if (loading === false) {
+            fetchTasks()
+        }
+        console.log('reached test')
     }, [optionalFilter])
 
 
@@ -113,30 +138,6 @@ export default function Home() {
 
 
 
-    /* on mount */
-    useEffect(() => {
-
-
-
-        if (localStorage.getItem('id') == undefined) {
-            navigate("/login")
-            return
-        }
-
-
-        if (params.name === "favorites") {
-            setOptionalFilter("favorite")
-        } else if (params.name === "upcoming") {
-            setOptionalFilter("upcoming")
-        }
-        setLoading(false)
-        fetchTasks()
-
-
-
-
-
-    }, [])
 
     const handleClickOpen = () => {
         setOpen(true);
