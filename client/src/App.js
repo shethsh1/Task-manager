@@ -20,6 +20,7 @@ function App() {
         <Route path="/login" element={<Login />} exact />
         <Route path="/signup" element={<Signup />} exact />
         <Route path="/home" element={<Home />} exact />
+        <Route path="/home/:name" element={<Home />} exact />
         <Route path='*' element={<Navigate to='/login' />} />
 
 

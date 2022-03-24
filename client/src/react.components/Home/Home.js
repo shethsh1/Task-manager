@@ -21,6 +21,9 @@ import UpdatePriority from './UpdatePriority'
 import UpdateDate from './UpdateDate'
 import UpdateProgress from './UpdateProgress';
 import EditTasksModal from './EditTasksModal';
+import logo from '../../assets/cc2.png'
+import { useParams } from "react-router-dom";
+
 
 
 
@@ -28,9 +31,7 @@ import EditTasksModal from './EditTasksModal';
 
 const API_HOST_URL = process.env.REACT_APP_KEY || "";
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+
 
 
 
@@ -42,34 +43,91 @@ export default function Home() {
     const deleteTaskId = useRef(-1) /* deleteTask */
     const navigate = useNavigate();
     const objects = useRef(-1) /* EditTasksModal */
+    const [projects, setProjects] = useState('')
+
+    const params = useParams();
+    const [optionalFilter, setOptionalFilter] = useState('')
 
 
-    const setFieldsForModal = (o) => {
-        objects.current = o
 
-    }
+    useEffect(() => {
+        fetchTasks()
+    }, [optionalFilter])
+
+
 
 
     const logout = () => {
         localStorage.removeItem('id')
         localStorage.removeItem('email')
         navigate("/login")
+    }
+
+    const toFavorites = () => {
+        navigate("/home/favorites")
+    }
+
+    const toUpcoming = () => {
+        navigate("/home/upcoming")
+        setOptionalFilter("upcoming")
+        fetchTasks()
+
+
 
 
     }
+
+    const toProjects = () => {
+        navigate("/home")
+        setOptionalFilter("")
+        fetchTasks()
+    }
+
+
+    useEffect(() => {
+
+
+
+        /* adding */
+        let completed = 0
+        let notActive = 0
+        let inProgress = 0
+        for (const o of tasks) {
+            if (o.status == "Completed") {
+                completed += 1
+            } else if (o.status == "Not Active") {
+                notActive += 1
+            } else {
+                inProgress += 1
+            }
+        }
+        console.log(`${completed + notActive + inProgress} projects, ${completed} completed, ${inProgress} in progress, ${notActive} not active`)
+        setProjects(`${completed + notActive + inProgress} projects, ${completed} completed, ${inProgress} in progress, ${notActive} not active`)
+
+
+    }, [tasks])
 
 
 
 
     /* on mount */
     useEffect(() => {
+
+
+
         if (localStorage.getItem('id') == undefined) {
             navigate("/login")
             return
         }
-        console.log("reached")
+
+
+
         setLoading(false)
         fetchTasks()
+
+
+
+
 
     }, [])
 
@@ -92,11 +150,21 @@ export default function Home() {
     const fetchTasks = async () => {
         const userId = localStorage.getItem('id')
 
+        console.log(params.name)
+
         try {
             const response = await axios.get(`${API_HOST_URL}/get/tasks/${userId}`)
             console.log("fetch-data")
             console.log(response.data)
-            setTasks(response.data)
+            /* filtering */
+            let filter = response.data
+            if (optionalFilter === "upcoming") {
+                filter = response.data.filter((o) => {
+                    return moment(new Date()).format("MM/DD/YYYY") === moment(o.enddate).format("MM/DD/YYYY")
+                })
+
+            }
+            setTasks(filter)
         } catch (err) {
             console.log(err.response)
         }
@@ -182,12 +250,29 @@ export default function Home() {
 
             <div className="task-manager">
                 <div className="left-bar">
+
                     <div className="left-content">
+                        <div class="logo">
+                            <img src={logo} />
+                        </div>
                         <div className="action-list">
-                            <li className="item"><span><i className="fa fa-inbox icon"> </i>Projects</span></li>
-                            <li className="item"><span><i className="fa fa-star icon"> </i>Favorites</span></li>
-                            <li className="item"><span><i className="fa fa-calendar icon"> </i>Upcoming</span></li>
-                            <li className="item"><span><i className="fa fa-hashtag icon"> </i>Important</span></li>
+                            {params.name == undefined ?
+                                <li className="focusedItem"><span><i className="fa fa-inbox icon"> </i>Projects</span></li>
+                                : <li onClick={toProjects} className="item"><span><i className="fa fa-inbox icon"> </i>Projects</span></li>
+                            }
+
+                            {params.name === "favorites" ?
+
+                                <li className="focusedItem"><span><i className="fa fa-star icon"> </i>Favorites</span></li>
+                                : <li onClick={toFavorites} className="item"><span><i className="fa fa-star icon"> </i>Favorites</span></li>
+                            }
+
+                            {params.name === "upcoming" ?
+                                < li className="focusedItem"><span><i className="fa fa-calendar icon"> </i>Upcoming</span></li>
+                                :
+                                <li onClick={toUpcoming} className="item"><span><i className="fa fa-calendar icon"> </i>Upcoming</span></li>
+                            }
+
                             <li onClick={logout} className="item"><span><i class="fa-solid fa-arrow-right-from-bracket icon"></i>Logout</span></li>
                         </div>
 
@@ -203,19 +288,27 @@ export default function Home() {
                 { /* page contents */}
                 <div className="page-content">
 
-                    <div className="header">
-                        Projects
-                    </div>
+                    <div class="header-create">
 
-                    <button type="button" className="btn btn-secondary create-button indigo-200" onClick={handleClickOpen}>
-                        Create project
-                    </button>
+                        <div className="header">
+
+                            <div>Projects</div>
+                            <div class="sub-header">
+                                {projects}
+
+                            </div>
+                        </div>
+
+                        <button type="button" className="btn create-button" styles={{ backgroundColor: "#6610f2" }} onClick={handleClickOpen}>
+                            Create project
+                        </button>
+                    </div>
 
                     <div class="project-wrapper">
 
                         <div class="my-tasks">
                             <div class="column-headers">
-                                <span class="item-name">Task</span>
+                                <span class="item-name">Project</span>
                                 <span class="item">End Date</span>
                                 <span class="item">Status</span>
                                 <span class="item">Progress</span>
