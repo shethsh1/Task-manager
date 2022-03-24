@@ -77,8 +77,9 @@ if (process.env.LOCAL_SERVER != undefined) {
     CREATE SCHEMA IF NOT EXISTS task_manager;
 
     SET search_path TO task_manager;
-    drop table if exists users;
+    d
     drop table if exists tasks;
+    rop table if exists users;
 
 
     CREATE TABLE IF NOT EXISTS users (
