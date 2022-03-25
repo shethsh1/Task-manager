@@ -78,10 +78,6 @@ if (process.env.LOCAL_SERVER != undefined) {
 
     SET search_path TO task_manager;
     
-    drop table if exists tasks;
-    drop table if exists users;
-
-
     CREATE TABLE IF NOT EXISTS users (
         userId SERIAL,
         first_name varchar(36) NOT NULL,
