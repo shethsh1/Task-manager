@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, TextField, Dialog, DialogActions, MenuItem } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -12,20 +12,21 @@ const API_HOST_URL = process.env.REACT_APP_KEY || "";
 
 function EditTasksModal(props) {
     const { fetchTasks, o } = props
-    const [name, setName] = useState(o.projectname)
-    const [endDate, setEndDate] = useState(o.enddate)
-    const [summary, setSummary] = useState(o.summary)
-    const [description, setDescription] = useState(o.description)
-    const [difficulty, setDifficulty] = useState(o.difficulty)
-    const [status, setStatus] = useState(o.status)
-    const [priority, setPriority] = useState(o.priority)
-    const [progress, setProgress] = useState(o.progress)
+
+    const [name, setName] = useState('')
+    const [endDate, setEndDate] = useState('')
+    const [summary, setSummary] = useState('')
+    const [description, setDescription] = useState('')
+    const [difficulty, setDifficulty] = useState('')
+    const [status, setStatus] = useState('')
+    const [priority, setPriority] = useState('')
+    const [progress, setProgress] = useState(0)
 
 
     const handleUpdate = async (event) => {
         event.preventDefault()
 
-        console.log("here here")
+
 
 
         try {
@@ -44,6 +45,7 @@ function EditTasksModal(props) {
             const response = await axios.post(`${API_HOST_URL}/update/allTask`, body)
             console.log(response.data)
 
+
             fetchTasks()
 
         } catch (err) {
@@ -54,11 +56,38 @@ function EditTasksModal(props) {
 
 
 
+    const clearAll = () => {
+
+        setName('')
+        setEndDate('')
+        setSummary('')
+        setDescription('')
+        setDifficulty('')
+        setStatus('')
+        setPriority('')
+        setProgress('')
+    }
+
+    useEffect(() => {
+
+        setName(o.projectname)
+        setEndDate(o.enddate)
+        setSummary(o.summary)
+        setDescription(o.description)
+        setDifficulty(o.difficulty)
+        setStatus(o.status)
+        setPriority(o.priority)
+        setProgress(o.progress)
+    }, [o])
+
+
+
 
     return (
         <>
 
             {/* edit all modal */}
+
             <div class="modal fade edit-button-form" id="editAllTask" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <form class="modal-content" onSubmit={handleUpdate}>

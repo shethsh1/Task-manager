@@ -44,7 +44,7 @@ export default function Home() {
     const [tasks, setTasks] = useState([]) /* fetch tasks */
     const deleteTaskId = useRef(-1) /* deleteTask */
     const navigate = useNavigate();
-    const objects = useRef(-1) /* EditTasksModal */
+    const [curTask, setCurTask] = useState({}) /* EditTasksModal */
     const [projects, setProjects] = useState('')
 
     const params = useParams();
@@ -186,18 +186,22 @@ export default function Home() {
     }
 
 
+    const setEditTasks = (o) => {
+        setCurTask(o)
+    }
+
+
     const allTasks = tasks.map(o => {
 
 
-        console.log(o)
+
         return (
             <div key={o.taskid} class="task-row">
 
 
 
 
-                {/* edit tasks modal */}
-                <EditTasksModal o={o} fetchTasks={fetchTasks} />
+
 
 
                 <span style={{ display: 'flex' }} className="item-name">
@@ -222,7 +226,7 @@ export default function Home() {
                         </IconButton>
                         <ul class="dropdown-menu dropdown-menu-lg-end">
 
-                            <div data-bs-toggle="modal" data-bs-target="#editAllTask" class="ellip-tool">
+                            <div onClick={() => setEditTasks(o)} data-bs-toggle="modal" data-bs-target="#editAllTask" class="ellip-tool">
                                 <span class="icon"><i class="fa-solid fa-pen-to-square"></i></span>
                                 <span>Edit</span>
                             </div>
@@ -263,7 +267,8 @@ export default function Home() {
             {/* delete task modal */}
             <DeleteTask deleteTaskId={deleteTaskId} fetchTasks={fetchTasks} />
 
-
+            {/* edit tasks modal */}
+            <EditTasksModal o={curTask} fetchTasks={fetchTasks} />
 
 
 
